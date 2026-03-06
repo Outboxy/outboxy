@@ -1,0 +1,36 @@
+{
+  "name": "@outboxy/dialect-core",
+  "version": "0.1.0",
+  "description": "Core SQL dialect interface for Outboxy database abstraction",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "tsc --watch --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "outbox",
+    "dialect",
+    "sql",
+    "interface",
+    "database"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT"
+}

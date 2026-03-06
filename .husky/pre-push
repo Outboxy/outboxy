@@ -1,0 +1,45 @@
+echo "🚀 Running pre-push validation..."
+echo ""
+
+# 1. Check pnpm-lock.yaml is up to date
+echo "📦 Checking pnpm-lock.yaml is current..."
+pnpm install --lockfile-only
+if ! git diff --quiet pnpm-lock.yaml; then
+  echo "❌ pnpm-lock.yaml is out of sync!"
+  echo "   Run 'pnpm install' and commit the changes."
+  exit 1
+fi
+echo "✅ pnpm-lock.yaml is current"
+echo ""
+
+# 2. Run typecheck across all packages
+echo "🔍 Running typecheck..."
+pnpm typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ Typecheck failed!"
+  exit 1
+fi
+echo "✅ Typecheck passed"
+echo ""
+
+# 3. Run linting across all packages
+echo "🧹 Running lint..."
+pnpm lint
+if [ $? -ne 0 ]; then
+  echo "❌ Lint failed!"
+  exit 1
+fi
+echo "✅ Lint passed"
+echo ""
+
+# 4. Build all packages
+echo "🔨 Building packages..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed!"
+  exit 1
+fi
+echo "✅ Build succeeded"
+echo ""
+
+echo "✅ All pre-push checks passed! Pushing..."

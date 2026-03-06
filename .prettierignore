@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Private docs
+private-docs/
+
+# Validation code (preserved as-is)
+validation/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Lock files (auto-generated, should not be formatted)
+pnpm-lock.yaml

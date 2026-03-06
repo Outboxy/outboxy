@@ -1,0 +1,71 @@
+{
+  "name": "outboxy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Transactional Outbox Pattern as a Service",
+  "keywords": [
+    "outbox",
+    "pattern",
+    "postgresql",
+    "event-driven",
+    "reliability"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outboxy/outboxy.git"
+  },
+  "license": "MIT",
+  "author": "Outboxy Team",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "pnpm --filter @outboxy/api dev",
+    "dev:worker": "pnpm --filter @outboxy/worker dev",
+    "build": "pnpm -r build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "coverage:html": "genhtml coverage/lcov.info --output-directory coverage/html --title 'Outboxy Coverage' --ignore-errors inconsistent,corrupt && open coverage/html/index.html",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "changeset:version": "changeset version && pnpm install --lockfile-only",
+    "changeset:publish": "changeset publish",
+    "changeset:status": "changeset status --verbose",
+    "version-packages": "pnpm changeset:version",
+    "prepare": "husky",
+    "migrate": "pnpm --filter @outboxy/migrations migrate",
+    "generate:env-docs": "tsx scripts/generate-env-docs.ts",
+    "graph": "tsx scripts/generate-package-graph.ts"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.0",
+    "@eslint/js": "^9.39.2",
+    "@testcontainers/redpanda": "^11.11.0",
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "@vitest/coverage-v8": "^4.0.0",
+    "@vitest/ui": "^4.0.0",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "testcontainers": "^11.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

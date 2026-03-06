@@ -1,0 +1,51 @@
+{
+  "name": "@outboxy/publisher-core",
+  "version": "0.1.0",
+  "description": "Core interfaces and types for Outboxy publishers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@outboxy/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "outbox",
+    "publisher",
+    "interface",
+    "typescript"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT",
+  "homepage": "https://github.com/outboxy/outboxy#readme",
+  "bugs": {
+    "url": "https://github.com/outboxy/outboxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outboxy/outboxy.git",
+    "directory": "packages/publisher-core"
+  }
+}

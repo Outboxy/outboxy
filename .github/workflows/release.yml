@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      docker_version: ${{ steps.docker-version.outputs.version }}
+      server_version_changed: ${{ steps.server-version-check.outputs.server_version_changed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm -r test
+        env:
+          TESTCONTAINERS_REUSE: "true"
+
+      - name: Cleanup test containers
+        if: always()
+        run: |
+          echo "🧹 Cleaning up reused test containers..."
+          docker ps -a --filter "label=org.testcontainers.session-id" --format "{{.ID}}" | xargs -r docker rm -f
+          echo "✅ Container cleanup complete"
+
+      - name: Get Docker image version
+        id: docker-version
+        run: |
+          VERSION=$(node -p "require('./packages/server/package.json').version")
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Server version for Docker: ${VERSION}"
+
+      - name: Check if server version changed
+        id: server-version-check
+        run: |
+          CURRENT=$(node -p "require('./packages/server/package.json').version")
+          PREVIOUS=$(git show HEAD~1:packages/server/package.json 2>/dev/null \
+            | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).version" \
+            2>/dev/null || echo "")
+          if [ "$CURRENT" != "$PREVIOUS" ] && [ -n "$PREVIOUS" ]; then
+            echo "server_version_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Server version changed: ${PREVIOUS} -> ${CURRENT}"
+          else
+            echo "server_version_changed=false" >> "$GITHUB_OUTPUT"
+            echo "Server version unchanged: ${CURRENT}"
+          fi
+
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset:version
+          publish: pnpm changeset:publish
+          title: "chore: version packages"
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # NPM_CONFIG_PROVENANCE removed - not supported for private packages
+          # Will migrate to Trusted Publishing (OIDC) after first publish
+
+  docker:
+    name: Build Docker Image
+    needs: release
+    if: needs.release.outputs.server_version_changed == 'true'
+    uses: ./.github/workflows/docker.yml
+    with:
+      version: v${{ needs.release.outputs.docker_version }}
+    permissions:
+      contents: read
+      packages: write
+      security-events: write

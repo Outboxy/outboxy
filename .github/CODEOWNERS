@@ -1,0 +1,17 @@
+# Default owner for everything
+* @SebastienLeonce
+
+# Public API surface (breaking changes affect downstream users)
+packages/sdk/ @SebastienLeonce
+packages/sdk-nestjs/ @SebastienLeonce
+packages/schema/ @SebastienLeonce
+
+# Data integrity critical (SQL correctness, locking)
+packages/dialect-core/ @SebastienLeonce
+packages/dialect-postgres/ @SebastienLeonce
+packages/dialect-mysql/ @SebastienLeonce
+packages/worker/ @SebastienLeonce
+
+# CI/CD and security config
+.github/ @SebastienLeonce
+SECURITY.md @SebastienLeonce

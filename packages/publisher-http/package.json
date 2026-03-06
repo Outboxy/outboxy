@@ -1,0 +1,53 @@
+{
+  "name": "@outboxy/publisher-http",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HTTP webhook publisher for Outboxy",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@outboxy/logging": "workspace:*",
+    "@outboxy/publisher-core": "workspace:*",
+    "undici": "^7.16.0",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@outboxy/schema": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "keywords": [
+    "outbox",
+    "publisher",
+    "http",
+    "webhook",
+    "typescript"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT",
+  "homepage": "https://github.com/outboxy/outboxy#readme",
+  "bugs": {
+    "url": "https://github.com/outboxy/outboxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outboxy/outboxy.git",
+    "directory": "packages/publisher-http"
+  }
+}

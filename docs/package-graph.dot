@@ -1,0 +1,145 @@
+digraph packages {
+  rankdir=LR
+  fontname="Helvetica"
+  fontsize=11
+
+  // Default node and edge styles
+  node [shape=box, style=filled, fontname="Helvetica"]
+  edge [fontname="Helvetica", fontsize=9]
+
+  // Applications
+  subgraph cluster_apps {
+    label="Applications"
+    style=filled
+    color="#90EE90"
+    fillcolor="#90EE9022"
+    fontname="Helvetica-Bold"
+    "api" [fillcolor="#90EE90"]
+    "worker" [fillcolor="#90EE90"]
+  }
+
+  // Database Adapters
+  subgraph cluster_db_adapters {
+    label="Database Adapters"
+    style=filled
+    color="#87CEEB"
+    fillcolor="#87CEEB22"
+    fontname="Helvetica-Bold"
+    "db-adapter-core" [fillcolor="#87CEEB"]
+    "db-adapter-mysql" [fillcolor="#87CEEB"]
+    "db-adapter-postgres" [fillcolor="#87CEEB"]
+  }
+
+  // Core
+  subgraph cluster_core {
+    label="Core"
+    style=filled
+    color="#FFD700"
+    fillcolor="#FFD70022"
+    fontname="Helvetica-Bold"
+    "schema" [fillcolor="#FFD700"]
+    "migrations" [fillcolor="#FFD700"]
+  }
+
+  // Database Dialects
+  subgraph cluster_dialects {
+    label="Database Dialects"
+    style=filled
+    color="#B0E0E6"
+    fillcolor="#B0E0E622"
+    fontname="Helvetica-Bold"
+    "dialect-core" [fillcolor="#B0E0E6"]
+    "dialect-mysql" [fillcolor="#B0E0E6"]
+    "dialect-postgres" [fillcolor="#B0E0E6"]
+  }
+
+  // Event Publishers
+  subgraph cluster_publishers {
+    label="Event Publishers"
+    style=filled
+    color="#DDA0DD"
+    fillcolor="#DDA0DD22"
+    fontname="Helvetica-Bold"
+    "publisher-core" [fillcolor="#DDA0DD"]
+    "publisher-http" [fillcolor="#DDA0DD"]
+    "publisher-kafka" [fillcolor="#DDA0DD"]
+  }
+
+  // SDKs
+  subgraph cluster_sdk {
+    label="SDKs"
+    style=filled
+    color="#FFA07A"
+    fillcolor="#FFA07A22"
+    fontname="Helvetica-Bold"
+    "sdk" [fillcolor="#FFA07A"]
+    "sdk-nestjs" [fillcolor="#FFA07A"]
+  }
+
+  // Other packages
+  "server" [fillcolor=lightgray]
+  "tracing" [fillcolor=lightgray]
+
+  // Dependencies
+  "api" -> "db-adapter-core" [color=gray50]
+  "db-adapter-core" -> "schema" [color=gray50]
+  "db-adapter-mysql" -> "db-adapter-core" [color=gray50]
+  "db-adapter-mysql" -> "migrations" [color=gray50]
+  "db-adapter-mysql" -> "schema" [color=gray50]
+  "db-adapter-postgres" -> "db-adapter-core" [color=gray50]
+  "db-adapter-postgres" -> "migrations" [color=gray50]
+  "db-adapter-postgres" -> "schema" [color=gray50]
+  "dialect-mysql" -> "dialect-core" [color=gray50]
+  "dialect-mysql" -> "schema" [color=gray50]
+  "dialect-postgres" -> "dialect-core" [color=gray50]
+  "dialect-postgres" -> "schema" [color=gray50]
+  "publisher-core" -> "schema" [color=gray50]
+  "publisher-http" -> "publisher-core" [color=gray50]
+  "publisher-kafka" -> "publisher-core" [color=gray50]
+  "sdk" -> "dialect-core" [color=gray50]
+  "sdk" -> "schema" [color=gray50]
+  "sdk-nestjs" -> "sdk" [color=gray50]
+  "server" -> "api" [color=gray50]
+  "server" -> "worker" [color=gray50]
+  "server" -> "db-adapter-core" [color=gray50]
+  "server" -> "db-adapter-postgres" [color=gray50]
+  "server" -> "db-adapter-mysql" [color=gray50]
+  "server" -> "publisher-core" [color=gray50]
+  "server" -> "publisher-http" [color=gray50]
+  "server" -> "publisher-kafka" [color=gray50]
+  "server" -> "schema" [color=gray50]
+  "server" -> "migrations" [color=gray50]
+  "tracing" -> "publisher-core" [color=gray50]
+  "worker" -> "db-adapter-core" [color=gray50]
+  "worker" -> "publisher-core" [color=gray50]
+
+  // Legend
+  subgraph cluster_legend {
+    label=Legend
+    style=filled
+    color="lightgray"
+    fillcolor="white"
+    fontname="Helvetica-Bold"
+
+    node [shape=box, style=filled, fillcolor=white, width=0.1, height=0.1]
+
+    l_direct [label=""]
+    l_peer [label=""]
+    l_peer_opt [label=""]
+
+    l_direct -> l_peer [style=invis]
+    l_peer -> l_peer_opt [style=invis]
+
+    legend_direct [label="Direct dependency", shape=note, fontsize=9, fillcolor=white, color=gray50]
+    legend_peer [label="Peer dependency", shape=note, fontsize=9, fillcolor=white, color="#4169E1"]
+    legend_optional [label="Optional peer dependency", shape=note, fontsize=9, fillcolor=white, color="#9370DB"]
+
+    { rank=same; l_direct legend_direct }
+    { rank=same; l_peer legend_peer }
+    { rank=same; l_peer_opt legend_optional }
+
+    l_direct -> legend_direct [color=gray50, dir=none, label="solid line", fontsize=8]
+    l_peer -> legend_peer [color="#4169E1", style=dashed, dir=none, label="dashed", fontsize=8]
+    l_peer_opt -> legend_optional [color="#9370DB", style=dotted, dir=none, label="dotted", fontsize=8]
+  }
+}

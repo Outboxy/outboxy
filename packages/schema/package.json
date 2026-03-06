@@ -1,0 +1,40 @@
+{
+  "name": "@outboxy/schema",
+  "version": "0.1.0",
+  "description": "Shared schema constants and types for Outboxy",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "dev": "tsc --watch --project tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "keywords": [
+    "outbox",
+    "schema",
+    "types",
+    "constants"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT"
+}

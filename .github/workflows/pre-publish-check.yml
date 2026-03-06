@@ -1,0 +1,179 @@
+name: Pre-Publish Validation
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    paths:
+      - "packages/sdk/**"
+      - "packages/sdk-nestjs/**"
+      - "packages/tracing/**"
+      - "packages/server/src/**"
+      - "packages/api/src/**"
+      - "packages/worker/src/**"
+      - ".changeset/**"
+
+jobs:
+  validate:
+    name: Validate Package Changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.0
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Check for missing changesets
+        run: |
+          # Check if public package source code was modified
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "^packages/(sdk|sdk-nestjs|tracing)/src"; then
+            # Check if at least one changeset exists
+            if ! git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^\.changeset/.*\.md$'; then
+              echo "❌ ERROR: Public package source modified but no changeset found"
+              echo ""
+              echo "📝 To fix this, run:"
+              echo "   pnpm changeset"
+              echo ""
+              echo "💡 Then commit the generated .changeset/*.md file"
+              exit 1
+            else
+              echo "✅ Changeset found"
+            fi
+          else
+            echo "ℹ️  No source code changes in public packages"
+          fi
+
+      - name: Check for missing server changeset
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -qE "^packages/(server|api|worker)/src"; then
+            if ! git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^\.changeset/.*\.md$'; then
+              echo "::warning::Server-related source modified but no changeset found. Run 'pnpm changeset' and include @outboxy/server to trigger a Docker image build."
+            else
+              echo "Changeset found for server-related changes"
+            fi
+          else
+            echo "No server-related source changes detected"
+          fi
+
+      - name: Validate SDK package size
+        run: |
+          cd packages/sdk
+
+          # Create pack output
+          npm pack --dry-run > pack-output.txt 2>&1 || true
+
+          # Extract unpacked size
+          SIZE_LINE=$(grep "unpacked size:" pack-output.txt || echo "unpacked size: 0 kB")
+          SIZE_VALUE=$(echo "$SIZE_LINE" | grep -oE '[0-9]+(\.[0-9]+)?' | head -1)
+          SIZE_UNIT=$(echo "$SIZE_LINE" | grep -oE 'kB|MB' | head -1)
+
+          # Convert to kB for comparison
+          if [ "$SIZE_UNIT" = "MB" ]; then
+            SIZE_KB=$(echo "$SIZE_VALUE * 1024" | bc)
+          else
+            SIZE_KB=$SIZE_VALUE
+          fi
+
+          echo "📦 Package size: ${SIZE_VALUE} ${SIZE_UNIT}"
+
+          # Check if size exceeds 50KB
+          if [ "$(echo "$SIZE_KB > 50" | bc)" -eq 1 ]; then
+            echo "❌ ERROR: Package too large (${SIZE_VALUE} ${SIZE_UNIT})"
+            echo "   Maximum allowed: 50 kB"
+            echo ""
+            echo "💡 Check if test files or source maps are being included"
+            exit 1
+          fi
+
+          # Check for test/config files in tarball
+          if npm pack --dry-run 2>&1 | grep -E "test\.(ts|js)|spec\.(ts|js)|vitest\.config|tsconfig"; then
+            echo "❌ ERROR: Test or config files found in package!"
+            echo ""
+            echo "💡 Update 'files' array in package.json to exclude them"
+            exit 1
+          fi
+
+          echo "✅ Package validation passed"
+
+      - name: Validate NestJS SDK package size
+        run: |
+          cd packages/sdk-nestjs
+
+          # Check if package.json exists with files array
+          if ! grep -q '"files"' package.json; then
+            echo "⚠️  Warning: sdk-nestjs package.json missing 'files' array"
+            echo "   Skipping size validation (package not ready for publish)"
+            exit 0
+          fi
+
+          # Create pack output
+          npm pack --dry-run > pack-output.txt 2>&1 || true
+
+          # Extract unpacked size
+          SIZE_LINE=$(grep "unpacked size:" pack-output.txt || echo "unpacked size: 0 kB")
+          SIZE_VALUE=$(echo "$SIZE_LINE" | grep -oE '[0-9]+(\.[0-9]+)?' | head -1)
+          SIZE_UNIT=$(echo "$SIZE_LINE" | grep -oE 'kB|MB' | head -1)
+
+          # Convert to kB
+          if [ "$SIZE_UNIT" = "MB" ]; then
+            SIZE_KB=$(echo "$SIZE_VALUE * 1024" | bc)
+          else
+            SIZE_KB=$SIZE_VALUE
+          fi
+
+          echo "📦 NestJS SDK package size: ${SIZE_VALUE} ${SIZE_UNIT}"
+
+          if [ "$(echo "$SIZE_KB > 50" | bc)" -eq 1 ]; then
+            echo "❌ ERROR: Package too large (${SIZE_VALUE} ${SIZE_UNIT})"
+            exit 1
+          fi
+
+          if npm pack --dry-run 2>&1 | grep -E "test\.(ts|js)|spec\.(ts|js)|vitest\.config|tsconfig"; then
+            echo "❌ ERROR: Test or config files found in package!"
+            exit 1
+          fi
+
+          echo "✅ NestJS SDK validation passed"
+
+      - name: Run tests with coverage
+        run: pnpm -r run test -- --coverage
+        env:
+          TESTCONTAINERS_REUSE: "true"
+
+      - name: Cleanup test containers
+        if: always()
+        run: |
+          echo "🧹 Cleaning up reused test containers..."
+          docker ps -a --filter "label=org.testcontainers.session-id" --format "{{.ID}}" | xargs -r docker rm -f
+          echo "✅ Container cleanup complete"

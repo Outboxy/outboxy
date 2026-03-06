@@ -1,0 +1,83 @@
+# =============================================================================
+# OUTBOXY CONFIGMAP
+# Generated from config.ts - Run 'pnpm generate:env-docs' to regenerate
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: outboxy-config
+  labels:
+    app.kubernetes.io/name: outboxy
+data:
+  # Maximum database connections in pool
+  DB_POOL_MAX: "20"
+  # Minimum database connections in pool
+  DB_POOL_MIN: "2"
+  # Database connection timeout in milliseconds
+  DB_CONNECTION_TIMEOUT_MS: "5000"
+  # Database statement timeout in milliseconds
+  DB_STATEMENT_TIMEOUT_MS: "10000"
+  # Logging level
+  LOG_LEVEL: "info"
+  # Node.js environment
+  NODE_ENV: "development"
+  # "http" (default) or "kafka"
+  PUBLISHER_TYPE: "http"
+  # API server port
+  PORT: "3000"
+  # API server bind address
+  HOST: "0.0.0.0"
+  # Request timeout in milliseconds
+  REQUEST_TIMEOUT_MS: "30000"
+  # Maximum request body size in bytes
+  BODY_LIMIT: "1048576"
+  # Enable Swagger UI at /docs
+  SWAGGER_ENABLED: "true"
+  # Polling interval in milliseconds
+  POLL_INTERVAL_MS: "1000"
+  # Number of events to process per batch
+  BATCH_SIZE: "10"
+  # Maximum retry attempts for failed events
+  MAX_RETRIES: "5"
+  # Base delay for exponential backoff in milliseconds
+  BACKOFF_BASE_MS: "1000"
+  # Multiplier for exponential backoff
+  BACKOFF_MULTIPLIER: "2"
+  # Graceful shutdown timeout in milliseconds
+  SHUTDOWN_TIMEOUT_MS: "30000"
+  # Time threshold to consider an event as stale in milliseconds
+  STALE_EVENT_THRESHOLD_MS: "300000"
+  # Interval for stale event recovery in milliseconds
+  STALE_RECOVERY_INTERVAL_MS: "60000"
+  # Enable adaptive polling based on workload
+  ADAPTIVE_POLLING_ENABLED: "true"
+  # Minimum polling interval for adaptive polling in milliseconds
+  ADAPTIVE_POLLING_MIN_POLL_INTERVAL_MS: "100"
+  # Maximum polling interval for adaptive polling in milliseconds
+  ADAPTIVE_POLLING_MAX_POLL_INTERVAL_MS: "5000"
+  # Events threshold to consider workload as busy
+  ADAPTIVE_POLLING_BUSY_THRESHOLD: "50"
+  # Events threshold to consider workload as moderate
+  ADAPTIVE_POLLING_MODERATE_THRESHOLD: "10"
+  # Enable Prometheus metrics server
+  METRICS_ENABLED: "true"
+  # Prometheus metrics server port
+  METRICS_PORT: "9090"
+  # Prometheus metrics server bind address
+  METRICS_HOST: "0.0.0.0"
+  # Prometheus metrics endpoint path
+  METRICS_PATH: "/metrics"
+  # Number of worker instances per container
+  WORKER_COUNT: "1"
+  # Enable automatic cleanup of expired idempotency records
+  IDEMPOTENCY_CLEANUP_ENABLED: "true"
+  # Interval for idempotency cleanup in milliseconds
+  IDEMPOTENCY_CLEANUP_INTERVAL_MS: "86400000"
+  # Retention period for idempotency records in days
+  IDEMPOTENCY_RETENTION_DAYS: "30"
+  # Enable automatic cleanup of processed inbox events
+  INBOX_CLEANUP_ENABLED: "false"
+  # Interval for inbox cleanup in milliseconds
+  INBOX_CLEANUP_INTERVAL_MS: "86400000"
+  # Retention period for processed inbox events in days
+  INBOX_RETENTION_DAYS: "30"

@@ -1,0 +1,6 @@
+import { createProjectConfig } from "../testing-utils/src/vitest-helpers.js";
+
+export default createProjectConfig({
+  name: "db-adapter-mysql",
+  needsContainers: true,
+});

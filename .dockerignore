@@ -1,0 +1,65 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+*.tsbuildinfo
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+**/*.test.ts
+**/__tests__
+
+# Environment (keep .env.example)
+.env
+.env.*
+!.env.example
+
+# Documentation
+docs
+private-docs
+
+# Validation PoC (historical)
+validation
+
+# Logs and temp
+*.log
+tmp
+temp
+
+# Changesets
+.changeset
+
+# Husky
+.husky
+
+# Auth tokens (belt-and-suspenders)
+.npmrc
+
+# CI/CD configuration not needed in Docker
+.github
+
+# Community files not needed in image
+CODE_OF_CONDUCT.md
+SECURITY.md
+
+# Packages not needed for Docker build
+packages/sdk
+packages/sdk-nestjs
+packages/testing-utils
+packages/e2e

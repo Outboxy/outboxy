@@ -1,0 +1,54 @@
+{
+  "name": "@outboxy/tracing",
+  "version": "0.1.0",
+  "description": "OpenTelemetry tracing instrumentation for Outboxy",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./setup": {
+      "types": "./dist/setup.d.ts",
+      "import": "./dist/setup.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.212.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.212.0",
+    "@opentelemetry/instrumentation-http": "^0.212.0",
+    "@opentelemetry/instrumentation-undici": "^0.22.0",
+    "@opentelemetry/instrumentation-pg": "^0.64.0",
+    "@opentelemetry/resources": "^2.5.1",
+    "@opentelemetry/semantic-conventions": "^1.39.0",
+    "@outboxy/publisher-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "keywords": [
+    "outbox",
+    "tracing",
+    "opentelemetry",
+    "observability"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT"
+}

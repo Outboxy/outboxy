@@ -1,0 +1,38 @@
+{
+  "name": "@outboxy/e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "End-to-end integration tests for Outboxy",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:worker": "vitest run --dir src/worker",
+    "test:http": "vitest run --dir src/http",
+    "test:kafka": "vitest run --dir src/kafka",
+    "test:api": "vitest run --dir src/api",
+    "test:migrations": "vitest run --dir src/migrations --no-file-parallelism",
+    "test:transaction": "vitest run --dir src/transaction",
+    "test:idempotency": "vitest run --dir src/idempotency",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@outboxy/api": "workspace:*",
+    "@outboxy/db-adapter-core": "workspace:*",
+    "@outboxy/db-adapter-postgres": "workspace:*",
+    "@outboxy/dialect-postgres": "workspace:*",
+    "@outboxy/migrations": "workspace:*",
+    "@outboxy/publisher-core": "workspace:*",
+    "@outboxy/publisher-http": "workspace:*",
+    "@outboxy/publisher-kafka": "workspace:*",
+    "@outboxy/logging": "workspace:*",
+    "@outboxy/sdk": "workspace:*",
+    "@outboxy/testing-utils": "workspace:*",
+    "@outboxy/worker": "workspace:*",
+    "@types/node": "^20.11.0",
+    "fastify": "^5.0.0",
+    "kafkajs": "^2.2.4",
+    "pg": "^8.11.3",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  }
+}

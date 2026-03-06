@@ -1,0 +1,88 @@
+{
+  "name": "@outboxy/sdk",
+  "version": "0.1.0",
+  "description": "Outboxy Node.js SDK for integrating with applications",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./adapters": {
+      "types": "./dist/adapters/index.d.ts",
+      "import": "./dist/adapters/index.js",
+      "default": "./dist/adapters/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@outboxy/dialect-core": "workspace:*",
+    "@outboxy/schema": "workspace:*",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@outboxy/dialect-postgres": "workspace:*",
+    "@outboxy/testing-utils": "workspace:*",
+    "@types/pg": "^8.10.9",
+    "mysql2": "^3.9.0",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.0",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "keywords": [
+    "outbox",
+    "pattern",
+    "sdk",
+    "typescript",
+    "event-driven"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT",
+  "homepage": "https://github.com/outboxy/outboxy#readme",
+  "bugs": {
+    "url": "https://github.com/outboxy/outboxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outboxy/outboxy.git",
+    "directory": "packages/sdk"
+  },
+  "peerDependencies": {
+    "pg": "^8.11.0",
+    "mysql2": "^3.9.0",
+    "postgres": "^3.4.0"
+  },
+  "peerDependenciesMeta": {
+    "pg": {
+      "optional": true
+    },
+    "mysql2": {
+      "optional": true
+    },
+    "postgres": {
+      "optional": true
+    }
+  }
+}

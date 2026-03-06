@@ -1,0 +1,50 @@
+{
+  "name": "@outboxy/db-adapter-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Core interfaces and types for Outboxy database adapters",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@outboxy/schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@outboxy/testing-utils": "workspace:*",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.0"
+  },
+  "keywords": [
+    "outbox",
+    "database",
+    "adapter",
+    "interface",
+    "typescript"
+  ],
+  "author": "Outboxy Team <team@outboxy.dev>",
+  "license": "MIT",
+  "homepage": "https://github.com/outboxy/outboxy#readme",
+  "bugs": {
+    "url": "https://github.com/outboxy/outboxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outboxy/outboxy.git",
+    "directory": "packages/db-adapter-core"
+  }
+}
