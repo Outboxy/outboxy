@@ -1,6 +1,6 @@
 {
   "name": "@outboxy/worker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Outboxy event worker (polling & publishing)",
   "type": "module",
