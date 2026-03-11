@@ -29,7 +29,7 @@
     "@outboxy/testing-utils": "workspace:*",
     "@outboxy/worker": "workspace:*",
     "@types/node": "^20.11.0",
-    "fastify": "^5.0.0",
+    "fastify": "^5.8.1",
     "kafkajs": "^2.2.4",
     "pg": "^8.11.3",
     "typescript": "^5.3.3",
