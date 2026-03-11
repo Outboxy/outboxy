@@ -1,6 +1,6 @@
 {
   "name": "@outboxy/publisher-http",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "HTTP webhook publisher for Outboxy",
   "type": "module",
