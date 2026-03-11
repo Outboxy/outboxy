@@ -1,6 +1,6 @@
 {
   "name": "@outboxy/sdk-nestjs",
-  "version": "0.1.1",
+  "version": "2.1.5",
   "description": "NestJS integration for Outboxy transactional outbox pattern",
   "type": "module",
   "main": "./dist/index.js",
