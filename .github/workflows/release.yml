@@ -86,9 +86,9 @@ jobs:
           PREVIOUS=$(git show HEAD~1:packages/server/package.json 2>/dev/null \
             | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).version" \
             2>/dev/null || echo "")
-          if [ "$CURRENT" != "$PREVIOUS" ] && [ -n "$PREVIOUS" ]; then
+          if [ "$CURRENT" != "$PREVIOUS" ]; then
             echo "server_version_changed=true" >> "$GITHUB_OUTPUT"
-            echo "Server version changed: ${PREVIOUS} -> ${CURRENT}"
+            echo "Server version changed: ${PREVIOUS:-<none>} -> ${CURRENT}"
           else
             echo "server_version_changed=false" >> "$GITHUB_OUTPUT"
             echo "Server version unchanged: ${CURRENT}"
