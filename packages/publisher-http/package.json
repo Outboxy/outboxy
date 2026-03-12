@@ -24,8 +24,8 @@
   "dependencies": {
     "@outboxy/logging": "workspace:*",
     "@outboxy/publisher-core": "workspace:*",
-    "undici": "^7.16.0",
-    "zod": "^4.2.1"
+    "undici": "^7.22.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@outboxy/schema": "workspace:*",

@@ -26,13 +26,13 @@
     "@outboxy/migrations": "workspace:*",
     "@outboxy/schema": "workspace:*",
     "@outboxy/logging": "workspace:*",
-    "pg": "^8.11.3",
-    "zod": "^4.2.1"
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@outboxy/testing-utils": "workspace:*",
-    "@types/pg": "^8.10.9",
-    "pino": "^10.1.0",
+    "@types/pg": "^8.18.0",
+    "pino": "^10.3.1",
     "typescript": "^5.3.3",
     "vitest": "^4.0.0"
   },
