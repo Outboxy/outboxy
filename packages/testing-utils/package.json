@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@outboxy/migrations": "workspace:*",
-    "@testcontainers/mysql": "^10.0.0",
+    "@testcontainers/mysql": "^11.12.0",
     "@testcontainers/redpanda": "^11.11.0",
     "@types/pg": "^8.10.9",
     "testcontainers": "^11.11.0",
