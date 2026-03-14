@@ -43,7 +43,7 @@
   "devDependencies": {
     "@nestjs/common": "^10.4.15",
     "@nestjs/core": "^11.1.16",
-    "@nestjs/testing": "^10.4.15",
+    "@nestjs/testing": "^11.1.16",
     "@outboxy/dialect-postgres": "workspace:*",
     "@outboxy/migrations": "workspace:*",
     "@outboxy/testing-utils": "workspace:*",
