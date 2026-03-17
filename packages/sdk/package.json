@@ -39,17 +39,17 @@
     "@opentelemetry/api": "^1.9.0",
     "@outboxy/dialect-core": "workspace:*",
     "@outboxy/schema": "workspace:*",
-    "zod": "^4.2.1"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@outboxy/dialect-postgres": "workspace:*",
     "@outboxy/testing-utils": "workspace:*",
-    "@types/pg": "^8.10.9",
-    "mysql2": "^3.9.0",
-    "pg": "^8.11.3",
+    "@types/pg": "^8.18.0",
+    "mysql2": "^3.20.0",
+    "pg": "^8.20.0",
     "postgres": "^3.4.0",
     "typescript": "^5.3.3",
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.0"
   },
   "keywords": [
     "outbox",
@@ -71,7 +71,7 @@
   },
   "peerDependencies": {
     "pg": "^8.11.0",
-    "mysql2": "^3.9.0",
+    "mysql2": "^3.20.0",
     "postgres": "^3.4.0"
   },
   "peerDependenciesMeta": {
