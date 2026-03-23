@@ -1,15 +1,25 @@
 {
   "name": "@outboxy/migrations",
   "version": "0.1.0",
-  "private": true,
   "description": "Database migrations for Outboxy",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/sql/**/*.sql",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
@@ -20,9 +30,6 @@
     "prepublishOnly": "pnpm build",
     "clean": "rm -rf dist node_modules",
     "migrate": "tsx src/runner.ts"
-  },
-  "dependencies": {
-    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/pg": "^8.10.9",

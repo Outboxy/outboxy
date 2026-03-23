@@ -1,9 +1,28 @@
-import { Pool } from "pg";
 import path from "path";
 import { fileURLToPath } from "url";
 import { existsSync, readFileSync, readdirSync } from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+async function requirePg(): Promise<typeof import("pg")> {
+  try {
+    return await import("pg");
+  } catch {
+    throw new Error(
+      'The "pg" package is required for PostgreSQL migrations. Install it with: npm install pg',
+    );
+  }
+}
+
+async function requireMysql2(): Promise<typeof import("mysql2/promise")> {
+  try {
+    return await import("mysql2/promise");
+  } catch {
+    throw new Error(
+      'The "mysql2" package is required for MySQL migrations. Install it with: npm install mysql2',
+    );
+  }
+}
 
 export type Dialect = "postgresql" | "postgres" | "mysql";
 
@@ -46,6 +65,7 @@ export async function getMigrationStatus(
 async function getPostgresMigrationStatus(
   connectionString: string,
 ): Promise<MigrationStatus> {
+  const { Pool } = await requirePg();
   const pool = new Pool({ connectionString });
 
   try {
@@ -93,7 +113,7 @@ async function getPostgresMigrationStatus(
 async function getMySQLMigrationStatus(
   connectionString: string,
 ): Promise<MigrationStatus> {
-  const { createPool } = await import("mysql2/promise");
+  const { createPool } = await requireMysql2();
 
   const url = new URL(connectionString);
   const pool = createPool({
@@ -122,7 +142,7 @@ async function getMySQLMigrationStatus(
     if (!exists) {
       return {
         applied: [],
-        pending: getAllMigrationNames(),
+        pending: getAllMigrationNames("mysql"),
         lastApplied: null,
       };
     }
@@ -137,7 +157,7 @@ async function getMySQLMigrationStatus(
       applied_at: Date;
     }
     const applied = (appliedResult as MigrationRow[]).map((row) => row.name);
-    const allMigrations = getAllMigrationNames();
+    const allMigrations = getAllMigrationNames("mysql");
     const pending = allMigrations.filter((name) => !applied.includes(name));
     const lastApplied = applied[0] || null;
 
@@ -188,8 +208,9 @@ export async function runMigrations(
 
 const MIGRATION_PATTERN = /^\d{3}_[a-z_]+\.sql$/;
 
-function getAllMigrationNames(): string[] {
-  const sqlDir = path.join(__dirname, "sql/postgres");
+function getAllMigrationNames(dialect: Dialect = "postgres"): string[] {
+  const dirName = dialect === "mysql" ? "mysql" : "postgres";
+  const sqlDir = path.join(__dirname, "sql", dirName);
   return readdirSync(sqlDir)
     .filter((f) => MIGRATION_PATTERN.test(f))
     .sort()
@@ -200,6 +221,7 @@ function getAllMigrationNames(): string[] {
  * Run PostgreSQL migrations using raw SQL
  */
 async function runPostgresMigrations(connectionString: string): Promise<void> {
+  const { Pool } = await requirePg();
   const pool = new Pool({ connectionString });
 
   try {
@@ -272,7 +294,7 @@ async function runPostgresMigrations(connectionString: string): Promise<void> {
  * Run MySQL migrations using SQL files
  */
 async function runMySQLMigrations(connectionString: string): Promise<void> {
-  const { createPool } = await import("mysql2/promise");
+  const { createPool } = await requireMysql2();
 
   // Parse connection string to get connection details
   const url = new URL(connectionString);
@@ -310,7 +332,7 @@ async function runMySQLMigrations(connectionString: string): Promise<void> {
 
     // Find SQL files
     const sqlDir = path.join(__dirname, "sql/mysql");
-    const migrations = getAllMigrationNames();
+    const migrations = getAllMigrationNames("mysql");
 
     // Run migrations that haven't been applied yet
     for (const migrationName of migrations) {
