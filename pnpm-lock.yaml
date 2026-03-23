@@ -316,7 +316,7 @@ importers:
         specifier: ^3.9.0
         version: 3.16.0
       pg:
-        specifier: ^8.11.3
+        specifier: ^8.11.0
         version: 8.16.3
     devDependencies:
       '@types/pg':
