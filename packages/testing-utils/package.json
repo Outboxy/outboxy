@@ -23,19 +23,19 @@
   },
   "dependencies": {
     "kafkajs": "^2.2.4",
-    "mysql2": "^3.9.0",
-    "pg": "^8.11.3"
+    "mysql2": "^3.20.0",
+    "pg": "^8.20.0"
   },
   "devDependencies": {
     "@outboxy/migrations": "workspace:*",
-    "@testcontainers/mysql": "^11.12.0",
-    "@testcontainers/redpanda": "^11.11.0",
-    "@types/pg": "^8.10.9",
-    "testcontainers": "^11.11.0",
+    "@testcontainers/mysql": "^11.13.0",
+    "@testcontainers/redpanda": "^11.13.0",
+    "@types/pg": "^8.20.0",
+    "testcontainers": "^11.13.0",
     "typescript": "^5.3.3",
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.0"
   },
   "peerDependencies": {
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.0"
   }
 }
