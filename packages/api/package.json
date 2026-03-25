@@ -20,7 +20,7 @@
     "@fastify/swagger-ui": "^5.2.3",
     "@outboxy/db-adapter-core": "workspace:*",
     "@outboxy/logging": "workspace:*",
-    "fastify": "^5.8.1",
+    "fastify": "^5.8.3",
     "fastify-plugin": "^5.0.1",
     "pino": "^10.1.0",
     "zod": "^4.2.1"
