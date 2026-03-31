@@ -29,19 +29,19 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/sdk-node": "^0.212.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.212.0",
-    "@opentelemetry/instrumentation-http": "^0.212.0",
-    "@opentelemetry/instrumentation-undici": "^0.22.0",
-    "@opentelemetry/instrumentation-pg": "^0.64.0",
-    "@opentelemetry/resources": "^2.5.1",
-    "@opentelemetry/semantic-conventions": "^1.39.0",
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/sdk-node": "^0.214.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.214.0",
+    "@opentelemetry/instrumentation-http": "^0.214.0",
+    "@opentelemetry/instrumentation-undici": "^0.24.0",
+    "@opentelemetry/instrumentation-pg": "^0.66.0",
+    "@opentelemetry/resources": "^2.6.1",
+    "@opentelemetry/semantic-conventions": "^1.40.0",
     "@outboxy/publisher-core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
-    "vitest": "^4.0.0"
+    "vitest": "^4.1.2"
   },
   "keywords": [
     "outbox",
